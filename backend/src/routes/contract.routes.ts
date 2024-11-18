@@ -1,6 +1,6 @@
 import express from 'express';
 import { BlockchainService } from '../services/blockchain.service';
-import { authenticateToken } from '../middleware/auth';
+import { authenticate } from '../middleware/auth';
 import { validateRequest } from '../middleware/validation';
 import { AppError } from '../middleware/error';
 import {
@@ -22,7 +22,7 @@ const blockchainService = new BlockchainService();
  */
 router.get(
   '/:contractAddress',
-  authenticateToken,
+  authenticate,
   validateRequest({
     params: contractAddressParamSchema,
   }),
@@ -45,19 +45,20 @@ router.get(
  */
 router.put(
   '/:contractAddress/status',
-  authenticateToken,
+  authenticate,
   validateRequest({
     params: contractAddressParamSchema,
     body: contractStatusSchema,
   }),
   async (req, res, next) => {
     try {
-      if (req.user.role !== 'ADMIN') {
+      if (!req.user || req.user.role !== 'ADMIN') {
         throw new AppError(403, 'Only admins can update contract status');
       }
 
+      const { contractAddress } = req.params;
       const contract = await blockchainService.updateContractStatus(
-        req.params.contractAddress,
+        contractAddress,
         req.body.status
       );
       res.json(contract);
@@ -74,7 +75,7 @@ router.put(
  */
 router.post(
   '/donation',
-  authenticateToken,
+  authenticate,
   validateRequest({
     body: donationContractSchema,
   }),
@@ -102,7 +103,7 @@ router.post(
  */
 router.post(
   '/foodpack',
-  authenticateToken,
+  authenticate,
   validateRequest({
     body: foodPackContractSchema,
   }),
@@ -130,7 +131,7 @@ router.post(
  */
 router.post(
   '/feedingneed',
-  authenticateToken,
+  authenticate,
   validateRequest({
     body: feedingNeedContractSchema,
   }),
@@ -158,7 +159,7 @@ router.post(
  */
 router.post(
   '/delivery',
-  authenticateToken,
+  authenticate,
   validateRequest({
     body: deliveryContractSchema,
   }),
