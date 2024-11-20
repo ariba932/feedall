@@ -1,29 +1,31 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import './globals.css'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import { Toaster } from 'react-hot-toast'
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import ClientProviders from '@/components/providers/ClientProviders';
-import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'FeedAll - Blockchain-Powered Food Donations',
-  description: 'Join our blockchain-powered platform to make food donations transparent, traceable, and impactful.',
-};
+  title: 'FeedAll - Connecting Food Surplus with Those in Need',
+  description: 'FeedAll is a platform connecting food donors with verified recipients, making food donation simple, secure, and impactful.',
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased bg-white dark:bg-gray-900 transition-colors duration-200`} suppressHydrationWarning>
+    <html lang="en" className="light" style={{ colorScheme: 'light' }}>
+      <body className={inter.className}>
         <ThemeProvider>
           <ClientProviders />
           {children}
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
-  );
+  )
 }

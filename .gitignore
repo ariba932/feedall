@@ -10,6 +10,18 @@
 !.yarn/releases
 !.yarn/versions
 
+# Backend
+/Backend//node_modules
+/Backend/.pnp
+/Backend/.pnp.*
+/Backend/.yarn/*
+/Backend!.yarn/patches
+/Backend!.yarn/plugins
+/Backend!.yarn/releases
+/Backend!.yarn/versions
+/Backend/.env
+/Backend/prisma/migrations
+
 # testing
 /coverage
 

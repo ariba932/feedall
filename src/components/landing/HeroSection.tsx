@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center">
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary-light/10 to-accent-light/10 dark:from-primary-dark/20 dark:to-accent-dark/20" />
 
@@ -23,7 +23,7 @@ export default function HeroSection() {
             traceable, and impactful.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20">
             <Link
               href="/donate"
               className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark dark:bg-primary-light dark:hover:bg-primary text-white font-semibold py-4 px-8 rounded-lg transition-colors duration-300"
@@ -41,65 +41,75 @@ export default function HeroSection() {
           </div>
 
           {/* Trust Indicators */}
-          <div className="mt-20 pt-8 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <div className="relative py-12 border-t border-gray-200 dark:border-gray-700">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
               Trusted by leading organizations
             </p>
-            <div className="flex justify-center gap-8 opacity-70">
-              {/* Add your partner logos here */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="relative w-32 h-16">
+                  <div className="absolute inset-0">
+                    <Image
+                      src={`/images/partner-${i}.png`}
+                      alt={`Partner ${i}`}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Background Pattern */}
-          <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-
           {/* Hero Image */}
-          <div className="relative w-full aspect-square">
-            <Image
-              src="/images/hero-image.png"
-              alt="Food Donation Platform"
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-contain"
-              priority
-            />
+          <div className="relative w-full aspect-video mt-12">
+            <div className="absolute inset-0">
+              <Image
+                src="/images/hero-image.png"
+                alt="Food Donation Platform"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-contain"
+                priority
+              />
+            </div>
           </div>
 
           {/* Floating Stats Card */}
-          <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-lg shadow-xl">
+          <div className="absolute bottom-4 left-4 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl">
             <div className="flex items-center gap-4">
-              <div className="bg-primary/10 p-3 rounded-full">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-primary/10 dark:bg-primary/20 p-3 rounded-full">
+                <svg className="w-6 h-6 text-primary dark:text-primary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Total Impact</p>
-                <p className="text-xl font-bold text-gray-900">50K+ Meals</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Total Impact</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">50K+ Meals</p>
               </div>
             </div>
           </div>
 
           {/* User Avatars */}
-          <div className="mt-12 flex items-center gap-8">
+          <div className="flex items-center justify-center gap-4 mt-12">
             <div className="flex -space-x-4">
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className="w-12 h-12 rounded-full border-2 border-white overflow-hidden"
+                  className="relative w-12 h-12 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden"
                 >
-                  <Image
-                    src={`/images/avatar-${i}.jpg`}
-                    alt={`User ${i}`}
-                    width={48}
-                    height={48}
-                    sizes="(max-width: 768px) 25vw, 15vw"
-                    className="w-full h-full object-cover"
-                  />
+                  <div className="absolute inset-0">
+                    <Image
+                      src={`/images/avatar-${i}.jpg`}
+                      alt={`User ${i}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
-            <p className="text-gray-100">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Join <span className="font-bold">1000+</span> donors making a difference
             </p>
           </div>
