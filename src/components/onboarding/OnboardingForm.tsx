@@ -1,5 +1,6 @@
+"use client"
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { UserRole } from '@/types/user';
 import { StepIndicator } from './StepIndicator';
@@ -87,11 +88,21 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
 
   const handleInputChange = (
     field: keyof Omit<FormData, 'address' | 'kycDocuments'>,
-    value: string | React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | null
+    value: string | React.ChangeEvent<HTMLInputElement> | null
   ) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: value instanceof Event ? (value.target as HTMLInputElement | HTMLSelectElement).value : value,
+      [field]: value instanceof Event ? (value.target as HTMLInputElement).value : value,
+    }));
+  };
+
+  const handleSelectChange = (
+    field: keyof Pick<FormData, 'businessType'>,
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: event.target.value,
     }));
   };
 
@@ -268,7 +279,7 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
             <Select
               label="Business Type"
               value={formData.businessType}
-              onChange={(e) => handleInputChange('businessType', e)}
+              onChange={(e) => handleSelectChange('businessType', e)}
               options={[
                 { value: 'NGO', label: 'Non-Profit Organization' },
                 { value: 'LOGISTICS', label: 'Logistics Provider' },
@@ -285,33 +296,33 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
           </div>
         ) : (
           <div className="space-y-6">
-            <h3 className="text-xl font-semibold mb-4">Review Your Information</h3>
+            <h3 className="text-xl font-semibold mb-4 dark:text-gray-100">Review Your Information</h3>
             
             <div className="space-y-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Account Details</h4>
-                <p>Email: {formData.email}</p>
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <h4 className="font-medium mb-2 dark:text-gray-100">Account Details</h4>
+                <p className="dark:text-gray-300">Email: {formData.email}</p>
               </div>
               
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Personal Information</h4>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <h4 className="font-medium mb-2 dark:text-gray-100">Personal Information</h4>
+                <div className="grid grid-cols-2 gap-4 dark:text-gray-300">
                   <p>First Name: {formData.firstName}</p>
                   <p>Last Name: {formData.lastName}</p>
                   <p>Phone: {formData.phone}</p>
                 </div>
               </div>
               
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Address</h4>
-                <p>{formData.address.street}</p>
-                <p>{formData.address.city}, {formData.address.state} {formData.address.postalCode}</p>
-                <p>{formData.address.country}</p>
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <h4 className="font-medium mb-2 dark:text-gray-100">Address</h4>
+                <p className="dark:text-gray-300">{formData.address.street}</p>
+                <p className="dark:text-gray-300">{formData.address.city}, {formData.address.state} {formData.address.postalCode}</p>
+                <p className="dark:text-gray-300">{formData.address.country}</p>
               </div>
             </div>
             
             <div className="mt-6">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Please review your information carefully. Once submitted, your application will be reviewed by our team.
                 You will receive an email once your account is verified.
               </p>
@@ -323,7 +334,7 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-2">KYC Documents</h3>
+              <h3 className="text-lg font-medium mb-2 dark:text-gray-100">KYC Documents</h3>
               <FileUpload
                 label="Upload KYC Documents"
                 accept="image/*,.pdf"
@@ -365,7 +376,7 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
               </div>
             </div>
             <div>
-              <h3 className="text-lg font-medium mb-2">Operating License</h3>
+              <h3 className="text-lg font-medium mb-2 dark:text-gray-100">Operating License</h3>
               <FileUpload
                 label="Upload Operating License"
                 accept="image/*,.pdf"
@@ -388,41 +399,41 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
       case 4: // Confirmation (non-donor only)
         return (
           <div className="space-y-6">
-            <h3 className="text-xl font-semibold mb-4">Review Your Information</h3>
+            <h3 className="text-xl font-semibold mb-4 dark:text-gray-100">Review Your Information</h3>
             
             <div className="space-y-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Account Details</h4>
-                <p>Email: {formData.email}</p>
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <h4 className="font-medium mb-2 dark:text-gray-100">Account Details</h4>
+                <p className="dark:text-gray-300">Email: {formData.email}</p>
               </div>
               
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Personal Information</h4>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <h4 className="font-medium mb-2 dark:text-gray-100">Personal Information</h4>
+                <div className="grid grid-cols-2 gap-4 dark:text-gray-300">
                   <p>First Name: {formData.firstName}</p>
                   <p>Last Name: {formData.lastName}</p>
                   <p>Phone: {formData.phone}</p>
                 </div>
               </div>
               
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Address</h4>
-                <p>{formData.address.street}</p>
-                <p>{formData.address.city}, {formData.address.state} {formData.address.postalCode}</p>
-                <p>{formData.address.country}</p>
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <h4 className="font-medium mb-2 dark:text-gray-100">Address</h4>
+                <p className="dark:text-gray-300">{formData.address.street}</p>
+                <p className="dark:text-gray-300">{formData.address.city}, {formData.address.state} {formData.address.postalCode}</p>
+                <p className="dark:text-gray-300">{formData.address.country}</p>
               </div>
               
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Business Information</h4>
-                <p>Company Name: {formData.companyName}</p>
-                <p>Tax ID: {formData.taxId}</p>
-                <p>Business Type: {formData.businessType}</p>
-                <p>Registration Number: {formData.registrationNumber}</p>
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <h4 className="font-medium mb-2 dark:text-gray-100">Business Information</h4>
+                <p className="dark:text-gray-300">Company Name: {formData.companyName}</p>
+                <p className="dark:text-gray-300">Tax ID: {formData.taxId}</p>
+                <p className="dark:text-gray-300">Business Type: {formData.businessType}</p>
+                <p className="dark:text-gray-300">Registration Number: {formData.registrationNumber}</p>
               </div>
             </div>
             
             <div className="mt-6">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Please review your information carefully. Once submitted, your application will be reviewed by our team.
                 You will receive an email once your account is verified.
               </p>
@@ -470,7 +481,7 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
   return (
     <div className="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
       <StepIndicator currentStep={currentStep} steps={steps} />
-      <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+      <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <form
           onSubmit={(e) => {
             e.preventDefault();
