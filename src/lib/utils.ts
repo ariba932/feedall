@@ -17,29 +17,31 @@ export function isTrustedEvent<T extends { isTrusted: boolean }>(event: T): bool
   return event.isTrusted === true
 }
 
-export function createSafeEventHandler<T extends { isTrusted: boolean }>(
-  handler: ((event: T) => void) | undefined
-): (event: T) => void {
+type EventHandler<T> = (event: T) => void;
+
+export function createSafeEventHandler<T>(handler: EventHandler<T>): EventHandler<T> {
   return (event: T) => {
-    if (isTrustedEvent(event) && handler) {
-      handler(event)
+    try {
+      handler(event);
+    } catch (error) {
+      console.error('Event handler error:', error);
     }
-  }
+  };
 }
 
-export function debounce<T extends (...args: any[]) => void>(
+export function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null
+  let timeout: NodeJS.Timeout;
 
-  return (...args: Parameters<T>) => {
-    if (timeout) {
-      clearTimeout(timeout)
-    }
+  return function executedFunction(...args: Parameters<T>) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
 
-    timeout = setTimeout(() => {
-      func(...args)
-    }, wait)
-  }
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import { UserRole } from '@/types/user';
 import { StepIndicator } from './StepIndicator';
 import { Button } from '../ui/Button';
@@ -47,6 +48,11 @@ interface FormData {
   registrationNumber: string;
   kycDocuments: Document[];
   operatingLicense: Document | null;
+}
+
+interface ErrorWithStatus extends Error {
+  status?: number;
+  message: string;
 }
 
 export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
@@ -149,7 +155,6 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
       
       if (data.success) {
         toast.success('Registration successful! Please check your email for verification.');
-        // Store any necessary data in localStorage
         if (data.token) {
           localStorage.setItem('auth_token', data.token);
         }
@@ -157,9 +162,10 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
       } else {
         toast.error(data.message || 'Registration failed. Please try again.');
       }
-    } catch (error: any) {
-      console.error('Registration error:', error);
-      toast.error(error.message || 'Failed to submit registration. Please try again.');
+    } catch (error) {
+      const err = error as ErrorWithStatus;
+      console.error('Registration error:', err);
+      toast.error(err.message || 'Failed to submit registration. Please try again.');
     }
   };
 
@@ -338,16 +344,20 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
               />
               <div className="mt-2 grid grid-cols-2 gap-2">
                 {formData.kycDocuments.map((doc, index) => (
-                  <div key={index} className="relative group">
-                    <img
-                      src={doc.documentImage.url}
-                      alt={doc.documentImage.alt}
-                      className="w-full h-32 object-cover rounded"
-                    />
+                  <div key={index} className="relative">
+                    <div className="relative w-32 h-32">
+                      <Image
+                        src={doc.documentImage.url}
+                        alt={doc.documentImage.alt}
+                        fill
+                        className="object-cover rounded-lg"
+                      />
+                    </div>
                     <button
                       onClick={() => removeKycDocument(index)}
-                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
                     >
+                      <span className="sr-only">Remove</span>
                       ×
                     </button>
                   </div>
@@ -362,18 +372,13 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
                 onChange={(files) => handleFileUpload('operatingLicense', files)}
               />
               {formData.operatingLicense && (
-                <div className="mt-2 relative group w-1/2">
-                  <img
+                <div className="relative w-32 h-32">
+                  <Image
                     src={formData.operatingLicense.documentImage.url}
                     alt={formData.operatingLicense.documentImage.alt}
-                    className="w-full h-32 object-cover rounded"
+                    fill
+                    className="object-cover rounded-lg"
                   />
-                  <button
-                    onClick={() => handleInputChange('operatingLicense', null)}
-                    className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    ×
-                  </button>
                 </div>
               )}
             </div>
