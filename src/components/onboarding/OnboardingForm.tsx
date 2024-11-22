@@ -12,10 +12,47 @@ interface OnboardingFormProps {
   type: 'donor' | 'non-donor';
 }
 
+interface Address {
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  postalCode: string;
+}
+
+interface DocumentImage {
+  url: string;
+  alt: string;
+}
+
+interface Document {
+  type: 'GOVERNMENT_ID' | 'BUSINESS_LICENSE';
+  documentNumber: string;
+  issuingAuthority: string;
+  issueDate: string;
+  documentImage: DocumentImage;
+}
+
+interface FormData {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  address: Address;
+  role: UserRole;
+  companyName: string;
+  taxId: string;
+  businessType: string;
+  registrationNumber: string;
+  kycDocuments: Document[];
+  operatingLicense: Document | null;
+}
+
 export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
     firstName: '',
@@ -42,14 +79,31 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
     ? ['Account', 'Personal Info', 'Confirmation']
     : ['Account', 'Personal Info', 'Business Info', 'Documents', 'Confirmation'];
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (
+    field: keyof Omit<FormData, 'address' | 'kycDocuments'>,
+    value: string | React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | null
+  ) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: value instanceof Event ? (value.target as HTMLInputElement | HTMLSelectElement).value : value,
     }));
   };
 
-  const handleAddressChange = (field: string, value: string) => {
+  const handleKycDocuments = (documents: Document[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      kycDocuments: documents,
+    }));
+  };
+
+  const removeKycDocument = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      kycDocuments: prev.kycDocuments.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleAddressChange = (field: keyof Address, value: string) => {
     setFormData((prev) => ({
       ...prev,
       address: {
@@ -59,39 +113,22 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
     }));
   };
 
-  const handleFileUpload = (field: string, files: File[]) => {
-    if (field === 'kycDocuments') {
-      setFormData((prev) => ({
-        ...prev,
-        kycDocuments: [
-          ...prev.kycDocuments,
-          ...files.map((file) => ({
-            type: 'GOVERNMENT_ID',
-            documentNumber: '',
-            issuingAuthority: '',
-            issueDate: new Date().toISOString(),
-            documentImage: {
-              url: URL.createObjectURL(file),
-              alt: file.name,
-            },
-          })),
-        ],
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: {
-          type: 'BUSINESS_LICENSE',
-          documentNumber: '',
-          issuingAuthority: '',
-          issueDate: new Date().toISOString(),
-          documentImage: {
-            url: URL.createObjectURL(files[0]),
-            alt: files[0].name,
-          },
-        },
-      }));
-    }
+  const handleFileUpload = (field: 'operatingLicense', files: File[]) => {
+    const createDocument = (file: File, type: Document['type']): Document => ({
+      type,
+      documentNumber: '',
+      issuingAuthority: '',
+      issueDate: new Date().toISOString(),
+      documentImage: {
+        url: URL.createObjectURL(file),
+        alt: file.name,
+      },
+    });
+
+    setFormData((prev) => ({
+      ...prev,
+      operatingLicense: files.length > 0 ? createDocument(files[0], 'BUSINESS_LICENSE') : null,
+    }));
   };
 
   const handleSubmit = async () => {
@@ -135,14 +172,14 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
               label="Email"
               type="email"
               value={formData.email}
-              onChange={(value) => handleInputChange('email', value)}
+              onChange={(e) => handleInputChange('email', e)}
               required
             />
             <Input
               label="Password"
               type="password"
               value={formData.password}
-              onChange={(value) => handleInputChange('password', value)}
+              onChange={(e) => handleInputChange('password', e)}
               required
             />
           </div>
@@ -155,13 +192,13 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
               <Input
                 label="First Name"
                 value={formData.firstName}
-                onChange={(value) => handleInputChange('firstName', value)}
+                onChange={(e) => handleInputChange('firstName', e)}
                 required
               />
               <Input
                 label="Last Name"
                 value={formData.lastName}
-                onChange={(value) => handleInputChange('lastName', value)}
+                onChange={(e) => handleInputChange('lastName', e)}
                 required
               />
             </div>
@@ -169,7 +206,7 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
               label="Phone"
               type="tel"
               value={formData.phone}
-              onChange={(value) => handleInputChange('phone', value)}
+              onChange={(e) => handleInputChange('phone', e)}
               required
             />
             <Input
@@ -213,19 +250,19 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
             <Input
               label="Company Name"
               value={formData.companyName}
-              onChange={(value) => handleInputChange('companyName', value)}
+              onChange={(e) => handleInputChange('companyName', e)}
               required
             />
             <Input
               label="Tax ID"
               value={formData.taxId}
-              onChange={(value) => handleInputChange('taxId', value)}
+              onChange={(e) => handleInputChange('taxId', e)}
               required
             />
             <Select
               label="Business Type"
               value={formData.businessType}
-              onChange={(value) => handleInputChange('businessType', value)}
+              onChange={(e) => handleInputChange('businessType', e)}
               options={[
                 { value: 'NGO', label: 'Non-Profit Organization' },
                 { value: 'LOGISTICS', label: 'Logistics Provider' },
@@ -236,7 +273,7 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
             <Input
               label="Registration Number"
               value={formData.registrationNumber}
-              onChange={(value) => handleInputChange('registrationNumber', value)}
+              onChange={(e) => handleInputChange('registrationNumber', e)}
               required
             />
           </div>
@@ -282,13 +319,25 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
             <div>
               <h3 className="text-lg font-medium mb-2">KYC Documents</h3>
               <FileUpload
-                label="Upload Government ID"
+                label="Upload KYC Documents"
                 accept="image/*,.pdf"
                 multiple
-                onChange={(files) => handleFileUpload('kycDocuments', files)}
+                onChange={(files) => {
+                  const documents: Document[] = files.map((file) => ({
+                    type: 'GOVERNMENT_ID' as const,
+                    documentNumber: '',
+                    issuingAuthority: '',
+                    issueDate: new Date().toISOString(),
+                    documentImage: {
+                      url: URL.createObjectURL(file),
+                      alt: file.name,
+                    },
+                  }));
+                  handleKycDocuments(documents);
+                }}
               />
               <div className="mt-2 grid grid-cols-2 gap-2">
-                {formData.kycDocuments.map((doc: any, index: number) => (
+                {formData.kycDocuments.map((doc, index) => (
                   <div key={index} className="relative group">
                     <img
                       src={doc.documentImage.url}
@@ -296,11 +345,7 @@ export const OnboardingForm: React.FC<OnboardingFormProps> = ({ type }) => {
                       className="w-full h-32 object-cover rounded"
                     />
                     <button
-                      onClick={() => {
-                        const newDocs = [...formData.kycDocuments];
-                        newDocs.splice(index, 1);
-                        handleInputChange('kycDocuments', newDocs);
-                      }}
+                      onClick={() => removeKycDocument(index)}
                       className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       ×

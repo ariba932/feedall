@@ -1,8 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -10,39 +10,35 @@
 !.yarn/releases
 !.yarn/versions
 
-# Backend
-/Backend//node_modules
-/Backend/.pnp
-/Backend/.pnp.*
-/Backend/.yarn/*
-/Backend!.yarn/patches
-/Backend!.yarn/plugins
-/Backend!.yarn/releases
-/Backend!.yarn/versions
-/Backend/.env
-/Backend/prisma/migrations
-
 # testing
-/coverage
+coverage/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
-/build
+build/
+dist/
 
 # misc
 .DS_Store
 *.pem
+.idea/
+.vscode/
+*.swp
+*.swo
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# local env files
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -50,3 +46,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Backend specific
+backend/dist/
+backend/build/
+backend/coverage/
+backend/.env
+backend/.env.*
+!backend/.env.example
+backend/prisma/migrations/
+
+# Temp files
+*.log
+.temp
+.tmp
