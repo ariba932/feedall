@@ -1,18 +1,28 @@
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { OnboardingContainer } from '@/components/onboarding/OnboardingContainer';
 
-interface Props {
-  params: {
-    type: string;
-  };
+export const metadata: Metadata = {
+  title: 'Onboarding - FeedAll',
+  description: 'Join FeedAll as a donor or service provider',
+};
+
+type Params = { type: 'donor' | 'non-donor' };
+
+export function generateStaticParams() {
+  return [
+    { type: 'donor' },
+    { type: 'non-donor' },
+  ];
 }
 
-export default function OnboardingPage({ params }: Props) {
-  const { type } = params;
 
-  if (!type || !['donor', 'non-donor'].includes(type)) {
+export default async function Page({ params }: { params: Promise<Params> }) {
+  const { type } = await params; // Await the params object
+
+  if (!['donor', 'non-donor'].includes(type)) {
     notFound();
   }
 
-  return <OnboardingContainer type={type as 'donor' | 'non-donor'} />;
+  return <OnboardingContainer type={type} />;
 }
