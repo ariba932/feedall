@@ -19,23 +19,42 @@ export default function CTASection() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/donate"
+                href="/onboarding/donor"
                 className="bg-white hover:bg-gray-100 text-primary font-bold py-4 px-8 rounded-lg transition-all duration-300 text-center"
               >
-                Start Donating
+                Register Now
               </Link>
-              <Link
+{/*               <Link
                 href="/register"
                 className="bg-accent hover:bg-accent-dark text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 text-center"
               >
                 Register Now
-              </Link>
+              </Link> */}
             </div>
           </div>
 
           {/* Decorative Elements */}
           <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-primary-light rounded-full opacity-20"></div>
           <div className="absolute -top-8 -right-8 w-32 h-32 bg-accent rounded-full opacity-20"></div>
+        </div>
+
+        {/* Service Provider Blocks */}
+        <div className="relative flex flex-col md:flex-row gap-16 mt-12">
+          <div className="absolute inset-0 bg-grid-pattern opacity-10 dark:opacity-5"></div>
+          <div className="relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-md w-full">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              Join Our Food Distribution Network
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+              Are you a food bank, NGO, volunteer group, or community organization? Join FeedAll&apos;s network of dedicated partners working to eliminate food waste and hunger. Together, we can efficiently distribute surplus food to those who need it most.
+            </p>
+            <Link
+              href="/onboarding/non-donor"
+              className="inline-block bg-primary hover:bg-primary-dark text-white font-bold py-3 px-6 rounded-lg transition-all duration-300"
+            >
+              Partner With Us
+            </Link>
+          </div>
         </div>
 
         {/* Trust Indicators */}

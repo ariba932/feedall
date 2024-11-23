@@ -25,7 +25,7 @@ export default function HeroSection() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20">
             <Link
-              href="/donate"
+              href="/onboarding/donor"
               className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark dark:bg-primary-light dark:hover:bg-primary text-white font-semibold py-4 px-8 rounded-lg transition-colors duration-300"
             >
               <BiDonateHeart className="w-6 h-6" />

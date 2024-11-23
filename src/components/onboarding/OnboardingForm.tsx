@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { UserRole } from '@/types/user';
 import { StepIndicator } from './StepIndicator';
-import { Button } from '../ui/Buttonss';
+import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { FileUpload } from '../ui/FileUpload';
