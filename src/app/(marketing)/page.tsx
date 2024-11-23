@@ -71,6 +71,7 @@ export default function Home() {
 
       {/* CTA Section */}
       <CTASection />
+
     </main>
   );
 }

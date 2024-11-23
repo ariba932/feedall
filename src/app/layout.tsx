@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import ClientProviders from '@/components/providers/ClientProviders';
+import { Footer } from '@/components/layout/Footer';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,6 +24,7 @@ export default function RootLayout({
         <ThemeProvider>
           <ClientProviders />
           {children}
+          <Footer />
         </ThemeProvider>
         <Toaster />
       </body>
