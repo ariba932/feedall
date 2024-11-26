@@ -47,12 +47,16 @@ export default function HeroSection() {
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="relative w-32 h-16">
+                <div
+                  key={i}
+                  className="relative w-32 h-16 grayscale hover:grayscale-0 transition-all duration-300"
+                >
                   <div className="absolute inset-0">
                     <Image
                       src={`/images/partner-${i}.png`}
                       alt={`Partner ${i}`}
                       fill
+                      sizes="(max-width: 768px) 50vw, 25vw"
                       className="object-contain"
                     />
                   </div>
@@ -68,7 +72,7 @@ export default function HeroSection() {
                 src="/images/hero-image.png"
                 alt="Food Donation Platform"
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 768px) 100vw, 80vw"
                 className="object-contain"
                 priority
               />
@@ -103,6 +107,7 @@ export default function HeroSection() {
                       src={`/images/avatar-${i}.jpg`}
                       alt={`User ${i}`}
                       fill
+                      sizes="(max-width: 768px) 48px, 48px"
                       className="object-cover"
                     />
                   </div>

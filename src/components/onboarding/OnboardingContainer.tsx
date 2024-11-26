@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { OnboardingForm } from './OnboardingForm';
+import OnboardingForm from './OnboardingForm';
 
 interface OnboardingContainerProps {
   type: 'donor' | 'non-donor';

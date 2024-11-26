@@ -16,57 +16,71 @@ export default function DashboardOverviewPage() {
       change: '+5.4%',
     },
     {
-      label: 'Deliveries',
+      label: 'Deliveries Made',
       value: '890',
       icon: <FaTruck className="w-6 h-6" />,
-      change: '+7.8%',
+      change: '+8.1%',
     },
     {
-      label: 'Verification Rate',
-      value: '98%',
+      label: 'Verified Partners',
+      value: '45',
       icon: <MdVerifiedUser className="w-6 h-6" />,
-      change: '+2.1%',
+      change: '+2.3%',
     },
   ];
 
   return (
-    <div className="p-6 space-y-6 bg-background-light dark:bg-background-dark">
+    <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-text-light dark:text-text-dark">Dashboard Overview</h1>
-        <button className="px-4 py-2 bg-primary-light dark:bg-primary text-white rounded-md hover:bg-primary dark:hover:bg-primary-dark transition-colors">
-          New Donation
-        </button>
+        <h1 className="text-2xl font-semibold tracking-tight">Dashboard Overview</h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat) => (
           <div
-            key={index}
-            className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700"
+            key={stat.label}
+            className="relative overflow-hidden rounded-lg bg-white p-6 shadow"
           >
-            <div className="flex items-center justify-between">
-              <div className="text-primary-light dark:text-primary">{stat.icon}</div>
-              <span className={`text-sm font-medium ${
-                stat.change.startsWith('+') ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-              }`}>
+            <dt>
+              <div className="absolute rounded-md bg-indigo-500 p-3">
+                {stat.icon}
+              </div>
+              <p className="ml-16 truncate text-sm font-medium text-gray-500">
+                {stat.label}
+              </p>
+            </dt>
+            <dd className="ml-16 flex items-baseline">
+              <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
+              <p className="ml-2 flex items-baseline text-sm font-semibold text-green-600">
                 {stat.change}
-              </span>
-            </div>
-            <div className="mt-4">
-              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{stat.label}</h3>
-              <p className="text-2xl font-semibold text-text-light dark:text-text-dark">{stat.value}</p>
-            </div>
+              </p>
+            </dd>
           </div>
         ))}
       </div>
 
-      {/* Recent Activity */}
-      <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-4 text-text-light dark:text-text-dark">Recent Activity</h2>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-          {/* Add your activity list here */}
-          <div className="p-4 text-text-light dark:text-text-dark">
-            Coming soon...
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        {/* Recent Donations */}
+        <div className="rounded-lg bg-white shadow">
+          <div className="p-6">
+            <h3 className="text-lg font-medium leading-6 text-gray-900">
+              Recent Donations
+            </h3>
+            <div className="mt-4">
+              <p className="text-sm text-gray-500">Coming soon...</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Active Recipients */}
+        <div className="rounded-lg bg-white shadow">
+          <div className="p-6">
+            <h3 className="text-lg font-medium leading-6 text-gray-900">
+              Active Recipients
+            </h3>
+            <div className="mt-4">
+              <p className="text-sm text-gray-500">Coming soon...</p>
+            </div>
           </div>
         </div>
       </div>
