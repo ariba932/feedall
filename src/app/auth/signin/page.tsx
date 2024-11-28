@@ -21,6 +21,7 @@ export default async function SignIn() {
 
     // Check if user is admin
     const isAdmin = userRoles?.includes('ADMIN');
+    console.log("The user Role: ",userRoles);
 
     if (isAdmin) {
       redirect('/admin/dashboard');
