@@ -1,7 +1,9 @@
 export enum UserRole {
-  DONOR = 'DONOR',
-  SERVICE_PROVIDER = 'SERVICE_PROVIDER',
-  ADMIN = 'ADMIN'
+  DONOR = 'donor',
+  VOLUNTEER = 'volunteer',
+  NGO = 'ngo',
+  SERVICE_PROVIDER = 'service_provider',
+  LOGISTICS_PROVIDER = 'logistics_provider'
 }
 
 export enum UserStatus {
